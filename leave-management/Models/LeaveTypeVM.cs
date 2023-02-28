@@ -8,9 +8,10 @@ namespace leave_management.Models
 {
     public class LeaveTypeVM
     {
+        
         public int ID { get; set; }
 
-      
+      [Required]
         public string Name { get; set; }
        [Display(Name ="Date Created")]
         public DateTime? DateCreated { get; set; }

@@ -33,7 +33,10 @@ namespace leave_management.Repository
             return _db.LeaveHistories.ToList();
 
         }
-
+        public bool isExist(int id)
+        {
+            throw new NotImplementedException();
+        }
         public LeaveHistory FindById(int id)
         {
             return _db.LeaveHistories.Find(id);
