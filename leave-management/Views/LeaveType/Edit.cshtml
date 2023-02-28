@@ -10,7 +10,7 @@
 <h4>LeaveTypeVM</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -23,13 +23,14 @@
             
             <div class="form-group">
                 <input type="submit" value="Save changes" class="btn btn-success btn-block" />
+              
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="col-md-3">
+    <a asp-action="Index" class="btn-dark">Back toList</a>
 </div>
 
 @section Scripts {
