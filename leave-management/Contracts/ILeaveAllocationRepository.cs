@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 namespace leave_management.Contracts
 {
    public interface ILeaveAllocationRepository:IRepositoryBase<LeaveAllocation>
-    {
-    }
+   {
+
+
+
+        bool checkAlloaction(int leavetypeid, string Employeeid);
+
+   }
 }

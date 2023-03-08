@@ -4,6 +4,7 @@ using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,17 +19,19 @@ namespace leave_management.Controllers
         private readonly ILeaveTypeRepository _leaverepo;
         private readonly ILeaveAllocationRepository _leaveallocationrepo;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
         public LeaveAllocationController(
                     ILeaveTypeRepository leaverepo,
                     ILeaveAllocationRepository leaveallocationrepo,
-                    IMapper mapper
-                    
+                    IMapper mapper,
+                    UserManager<IdentityUser> userManager
+
                 )
         {
             _leaverepo = leaverepo;
             _leaveallocationrepo = leaveallocationrepo;
             _mapper = mapper;
-           
+            _userManager = userManager;
         }
 
         // GET: LeaveAllocationController
@@ -108,6 +111,35 @@ namespace leave_management.Controllers
             {
                 return View();
             }
+        }
+        public ActionResult Setleave(int id)
+        {
+            var Leavetype = _leaverepo.FindById(id);
+            var Employees = _userManager.GetUsersInRoleAsync("Employee").Result;
+            foreach (var emp in Employees)
+            {
+                if (_leaveallocationrepo.checkAlloaction(id, emp.Id))
+                    continue;
+                var allocation = new LeaveAllocationVM
+                {
+                    DateCreated = DateTime.Now,
+                    EmployeeID = emp.Id,
+                    LeaveTypeId = id,
+                    NumberOfDays = Leavetype.DefaultDays,
+                    Period = DateTime.Now.Year
+
+                };
+                var LeaveAllocation = _mapper.Map<LeaveAllocation>(allocation);
+                _leaveallocationrepo.Create(LeaveAllocation);
+            }
+            return RedirectToAction(nameof(Index));  
+        }
+
+        public ActionResult ListEmployees()
+        {
+            var Employees = _userManager.GetUsersInRoleAsync("Employee").Result;
+            var model =_mapper.Map<List<EmployeeVM>>(Employees);
+            return View(model);
         }
     }
 }

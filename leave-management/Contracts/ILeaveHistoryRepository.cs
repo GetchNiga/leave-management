@@ -8,5 +8,6 @@ namespace leave_management.Contracts
 {
     public interface ILeaveHistoryRepository : IRepositoryBase<LeaveHistory>
     {
+       
     }
 }
