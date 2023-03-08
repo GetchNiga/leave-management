@@ -13,18 +13,18 @@ using System.Threading.Tasks;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    //[Authorize(Roles ="Administrator")]
     public class LeaveAllocationController : Controller
     {
         private readonly ILeaveTypeRepository _leaverepo;
         private readonly ILeaveAllocationRepository _leaveallocationrepo;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Employee> _userManager;
         public LeaveAllocationController(
                     ILeaveTypeRepository leaverepo,
                     ILeaveAllocationRepository leaveallocationrepo,
                     IMapper mapper,
-                    UserManager<IdentityUser> userManager
+                    UserManager<Employee> userManager
 
                 )
         {
@@ -45,9 +45,18 @@ namespace leave_management.Controllers
         }
 
         // GET: LeaveAllocationController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            return View();
+            var Employee = _mapper.Map<EmployeeVM>(_userManager.FindByIdAsync(id).Result);
+            var period = DateTime.Now.Year;
+            
+            var Allocation =_mapper.Map<List<LeaveAllocationVM>>(_leaveallocationrepo.GetLeaveAllocationByEmployee(id));
+            var model = new ViewAllocationVm
+            {
+                Employee = Employee,
+                leaveAllocations=Allocation
+            };
+            return View(model);
         }
 
         // GET: LeaveAllocationController/Create
@@ -118,14 +127,14 @@ namespace leave_management.Controllers
             var Employees = _userManager.GetUsersInRoleAsync("Employee").Result;
             foreach (var emp in Employees)
             {
-                if (_leaveallocationrepo.checkAlloaction(id, emp.Id))
+                if (_leaveallocationrepo.checkAlloaction(id, emp.TaxId))
                     continue;
                 var allocation = new LeaveAllocationVM
                 {
                     DateCreated = DateTime.Now,
-                    EmployeeID = emp.Id,
+                    EmployeeID = emp.TaxId,
                     LeaveTypeId = id,
-                    NumberOfDays = Leavetype.DefaultDays,
+                    //NumberOfDays = Leavetype.DefaultDays,
                     Period = DateTime.Now.Year
 
                 };

@@ -48,6 +48,15 @@ namespace leave_management.Repository
             return _db.leaveAllocations.Find(id);
         }
 
+        public ICollection<LeaveAllocation> GetLeaveAllocationByEmployee(string id)
+        {
+            var Period = DateTime.Now.Year;
+            return FindAll()
+                .Where(q => q.EmployeeId == id && q.Period==Period).ToList();
+
+
+        }
+
         public bool isExist(int id)
         {
             throw new NotImplementedException();
