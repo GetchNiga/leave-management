@@ -39,6 +39,7 @@ namespace leave_management.Repository
 
         public ICollection<LeaveAllocation> FindAll()
         {
+            var LeaveAllocation = _db.leaveAllocations.Find().LeaveType;
             return _db.leaveAllocations.ToList();
 
         }
