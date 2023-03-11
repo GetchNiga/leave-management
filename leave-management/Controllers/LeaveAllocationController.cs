@@ -83,21 +83,36 @@ namespace leave_management.Controllers
         // GET: LeaveAllocationController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var leaveAllocation = _leaverepo.FindById(id);
+            var Model = _mapper.Map<EditLeaveAllocationVM>(leaveAllocation);
+            return View(Model);
         }
 
         // POST: LeaveAllocationController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(EditLeaveAllocationVM Model)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (!ModelState.IsValid)
+                {
+                    return View(Model);
+                }
+                var Record = _leaveallocationrepo.FindById(Model.Id);
+                Record.NumberOfDays = Model.NumberOfDays;
+                var Allocation = _mapper.Map<LeaveAllocation>(Model);
+                var Issucces = _leaveallocationrepo.Update(Allocation);
+                if (!Issucces)
+                {
+                    ModelState.AddModelError("", "Error while saving");
+
+                }
+                return RedirectToAction(nameof(Details),new { id =Model.Employee});
             }
             catch
             {
-                return View();
+                return View(Model);
             }
         }
 

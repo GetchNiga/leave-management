@@ -12,7 +12,7 @@ namespace leave_management.Models
         
         public int ID { get; set; }
         [Required]
-        [Range(1,25,ErrorMessage="pleae enter valid number" )]    
+        //[Range(1,25,ErrorMessage="pleae enter valid number" )]    
        // public int DefaultDays { get; set; }
        // [Required]
         public string Name { get; set; }

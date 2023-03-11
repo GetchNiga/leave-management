@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details< for users/h1>
+<h1>Details< for users</h1>
 
 <div>
     <h4>EmployeeVM</h4>
@@ -71,7 +71,7 @@
               @foreach(var item in Model.leaveAllocations)
                 {
                 <li class="list-group-item">
-                  <h6>@item.LeaveType.Name <span class="badge badge-secondary">@item.NumberOfDays</span></h6> 
+                  <h6>@item.LeaveType.Name <span class="badge badge-secondary">@item.NumberOfDays</span><a asp-action="Edit"asp--route-id="@item.Id"></a>  </h6> 
                    <a class=" btn btn-outline-warning">
                        <i class="fade fa-pensil">Edit</i>
 
